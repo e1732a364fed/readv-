@@ -79,7 +79,7 @@ ReadMultiBuffer
 
 ## writev
 
-直接 搜索 writev是搜不到代码的。但是 在writer.go 中，使用了 `nb := net.Buffers(bs)`, 而golang官方的文档是：
+直接 搜索 writev是搜不到代码的。但是 在writer.go 中，BufferToBytesWriter.WriteMultiBuffer 使用了 `nb := net.Buffers(bs)`, 而golang官方的文档是：
 
 ```
 type Buffers [][]byte
@@ -112,6 +112,7 @@ On certain machines, for certain types of connections, this is optimized into an
 
 ```
 
+然后 common/buf/io.go 中 的 NewWriter 函数中，会返回 BufferToBytesWriter
 
 
 
