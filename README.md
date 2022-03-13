@@ -79,7 +79,18 @@ ReadMultiBuffer
 
 ## writev
 
-直接 
+直接 搜索 writev是搜不到代码的。但是 在writer.go 中，使用了 `nb := net.Buffers(bs)`, 而golang官方的文档是：
+
+```
+type Buffers [][]byte
+net.Buffers on pkg.go.dev
+
+Buffers contains zero or more runs of bytes to write.
+
+On certain machines, for certain types of connections, this is optimized into an OS-specific batch write operation (such as "writev").
+```
+
+就是说这个操作 和 splice的 ReadFrom道理一样，都是让golang去处理底层问题。 不错哦。
 
 
 
