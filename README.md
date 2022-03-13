@@ -77,7 +77,9 @@ ReadMultiBuffer
 而不为1的话，就调用 readMulti 
 
 
+## writev
 
+直接 
 
 
 
