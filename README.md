@@ -83,7 +83,6 @@ ReadMultiBuffer
 
 ```
 type Buffers [][]byte
-net.Buffers on pkg.go.dev
 
 Buffers contains zero or more runs of bytes to write.
 
@@ -94,7 +93,24 @@ On certain machines, for certain types of connections, this is optimized into an
 
 
 
+然后，在 ` nb.WriteTo(w.Writer)` 中，如果w.Writer实现了一个私有的 `writeBuffers(*Buffers) (int64, error)` 函数，就能够调用writev了。
 
+很明显，w.Writer 必须是 net包中定义的那几种 Conn 才可以。
+
+具体搜索net包，发现出现在如下位置
+
+```
+./fd_windows.go:121:func (c *conn) writeBuffers(v *Buffers) (int64, error) {
+./fd_windows.go:125:	n, err := c.fd.writeBuffers(v)
+./fd_windows.go:132:func (fd *netFD) writeBuffers(buf *Buffers) (int64, error) {
+./net.go:684:// writeBuffers should fully consume and write all chunks from the
+./net.go:687:	writeBuffers(*Buffers) (int64, error)
+./net.go:704:		return wv.writeBuffers(v)
+./writev_unix.go:15:func (c *conn) writeBuffers(v *Buffers) (int64, error) {
+./writev_unix.go:19:	n, err := c.fd.writeBuffers(v)
+./writev_unix.go:26:func (fd *netFD) writeBuffers(v *Buffers) (n int64, err error) {
+
+```
 
 
 
