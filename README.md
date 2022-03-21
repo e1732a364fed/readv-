@@ -125,3 +125,4 @@ readv经过搜索，发现只在vless 和trojan中使用过，感觉xray/v2ray �
 
 而如果是加密协议的话，没发直接用readv,因为读到的数据还要解密，分裂成多个缓存没有意义。writev同理。
 
+当然 对于不支持splice/sendfile的系统来说，直连时用readv可能也能增加性能
