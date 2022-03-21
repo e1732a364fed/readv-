@@ -86,7 +86,8 @@ type Buffers [][]byte
 
 Buffers contains zero or more runs of bytes to write.
 
-On certain machines, for certain types of connections, this is optimized into an OS-specific batch write operation (such as "writev").
+On certain machines, for certain types of connections, 
+this is optimized into an OS-specific batch write operation (such as "writev").
 ```
 
 就是说这个操作 和 splice的 ReadFrom道理一样，都是让golang去处理底层问题。 不错哦。
