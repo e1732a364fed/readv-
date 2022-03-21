@@ -115,7 +115,11 @@ this is optimized into an OS-specific batch write operation (such as "writev").
 
 然后 common/buf/io.go 中 的 NewWriter 函数中，会返回 BufferToBytesWriter
 
+# 简单总结
 
+readv经过搜索，发现只在vless 和trojan中使用过，感觉xray/v2ray 对于readv使用的还不是很广泛？
+
+也许是因为这两个协议是不带加密的，所以才可以使用吧。但是最好还是能抽象出来，不要放到每一个支持的协议的代码内部
 
 
 
