@@ -164,4 +164,8 @@ _, isFile := reader.(*os.File)
 
 就是说，xray在vless和trojan中 明示了直接使用NewReadVReader，而v2ray是使用普通的 NewReader，然后让内部自行判断是否启用 readv
 
+仔细想想, 真实使用范围似乎很狭窄，v2ray应该用不到
+仅限于 直接从 底层连接读取数据，且不需要解密的情况；一旦外面包了一层 tls，那么 我们就无法接触底层连接，而是tls接触 底层连接、解密数据之后再提供给我们
+
+所以说，readv的提升仅限于 不支持 splice 但却 确实是直接 直连读取的情况。 因为readv和writev的对象必须是 底层连接。
 
