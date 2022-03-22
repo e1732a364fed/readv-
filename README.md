@@ -175,4 +175,8 @@ _, isFile := reader.(*os.File)
 
 在 testing/scenarios/vmess_test.go 中，确实搜到了 readv字样
 
+考虑从 socks5向其它协议发送数据的过程，或者从 远程服务器读取数据并写入vless+tls 的过程，也会用到readv吧
+
+会用到readv系统调用 但是不会用到 writev系统调用，能实现一半的加速；不过也不一定明确，因为将[][]bytes 重新变成一整个 缓存 也许会减速
+
 
