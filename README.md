@@ -182,3 +182,29 @@ _, isFile := reader.(*os.File)
 会用到readv系统调用 但是不会用到 writev系统调用，能实现一半的加速；不过也不一定明确，因为将[][]bytes 重新变成一整个 缓存 也许会减速
 
 
+# 我的readv实现
+
+可以阅读我的 verysimple项目中 的代码 https://github.com/hahahrfool/v2ray_simple/tree/main/netLayer
+
+下面是我的benchmark
+
+我们本地benchmark，实际benchmark readv 是比 经典拷贝慢的
+
+我们添加一种情况 SimulateRealWorld, 分10次写入, 每次写入长度均小于MTU，此时即可发现readv更快
+
+数据如下
+
+```
+BenchmarkReadVCopy-8                             	  426525	      2934 ns/op
+BenchmarkClassicCopy-8                           	  531406	      2185 ns/op
+BenchmarkClassicCopy_SimulateRealWorld-8         	   60873	     19631 ns/op
+BenchmarkClassicCopy_SimulateRealWorld_ReadV-8   	   66138	     17907 ns/op
+```
+
+总之这种本地benchmark 对于 readv来说意义不大，因为本地回环太快了, readv只能徒增各种附加操作.
+
+理论上来说，在非本地测试环境下，只要每次传输的包超过了MTU，那么readv就应该是有优势的，包长度越大越有优势，因为越大越容易被割包，那么readv就越好用
+
+
+
+
