@@ -145,6 +145,8 @@ if (runtime.GOARCH == "386" || runtime.GOARCH == "amd64" || runtime.GOARCH == "s
   useReadv = true
 }
 ```
+不过xray的readv默认是全系统都打开的.
+
 
 NewReader 中 readv的使用范围
 
