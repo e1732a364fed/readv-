@@ -146,7 +146,7 @@ if (runtime.GOARCH == "386" || runtime.GOARCH == "amd64" || runtime.GOARCH == "s
 }
 ```
 
-NewReader中 readv的使用范围
+NewReader 中 readv的使用范围
 
 ```
 _, isFile := reader.(*os.File)
@@ -161,3 +161,7 @@ _, isFile := reader.(*os.File)
 		}
 	}
 ```
+
+就是说，xray在vless和trojan中 明示了直接使用NewReadVReader，而v2ray是使用普通的 NewReader，然后让内部自行判断是否启用 readv
+
+
