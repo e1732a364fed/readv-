@@ -115,7 +115,7 @@ this is optimized into an OS-specific batch write operation (such as "writev").
 
 然后 common/buf/io.go 中 的 NewWriter 函数中，会返回 BufferToBytesWriter
 
-# 简单总结
+# readv在xray和v2ray中的使用范围
 
 readv经过搜索，发现只在vless 和trojan中使用过，感觉xray 对于readv使用的还不是很广泛？
 
@@ -130,6 +130,34 @@ readv经过搜索，发现只在vless 和trojan中使用过，感觉xray 对于r
 不过似乎也没发轻易从vless割裂出来？因为 vless的头部并不是用readv读取的，也没必要。就是说是要分开处理，头部正常读取，数据部分使用readv读取
 
 
-而搜索v2ray，则发现readv函数虽然存在，却没有被用到。
+而搜索v2ray，则发现readv函数虽然存在，却没有在trojan和vless里被用到。
 
 这也是 我一开始误解认为readv是rprx写的原因。
+
+不过，common/buf/io.go  里的 NewReader 函数 还是有用到的
+
+根据 common/buf/readv_reader.go
+
+readv在如下环境中被启用
+
+```
+if (runtime.GOARCH == "386" || runtime.GOARCH == "amd64" || runtime.GOARCH == "s390x") && (runtime.GOOS == "linux" || runtime.GOOS == "darwin" || runtime.GOOS == "windows") {
+  useReadv = true
+}
+```
+
+NewReader中 readv的使用范围
+
+```
+_, isFile := reader.(*os.File)
+	if !isFile && useReadv {
+		if sc, ok := reader.(syscall.Conn); ok {
+			rawConn, err := sc.SyscallConn()
+			if err != nil {
+				newError("failed to get sysconn").Base(err).WriteToLog()
+			} else {
+				return NewReadVReader(reader, rawConn)
+			}
+		}
+	}
+```
