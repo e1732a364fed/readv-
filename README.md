@@ -117,12 +117,19 @@ this is optimized into an OS-specific batch write operation (such as "writev").
 
 # 简单总结
 
-readv经过搜索，发现只在vless 和trojan中使用过，感觉xray/v2ray 对于readv使用的还不是很广泛？
+readv经过搜索，发现只在vless 和trojan中使用过，感觉xray 对于readv使用的还不是很广泛？
 
 也许是因为这两个协议是不带加密的，所以才可以使用吧。但是最好还是能抽象出来，不要放到每一个支持的协议的代码内部
 
-但是应用也基本仅限vless/trojan这种不加密的协议了。因为如果是直连的话，Copy自动就可以splice；
+但是应用也基本仅限vless/trojan这种不加密的协议了, 而且实际查看发现只有direct流控时才能启用。因为如果是直连的话，Copy自动就可以splice；
 
 而如果是加密协议的话，没发直接用readv,因为读到的数据还要解密，分裂成多个缓存没有意义。writev同理。
 
 当然 对于不支持splice/sendfile的系统来说，直连时用readv可能也能提升性能
+
+不过似乎也没发轻易从vless割裂出来？因为 vless的头部并不是用readv读取的，也没必要。就是说是要分开处理，头部正常读取，数据部分使用readv读取
+
+
+而搜索v2ray，则发现readv函数虽然存在，却没有被用到。
+
+这也是 我一开始误解认为readv是rprx写的原因。
