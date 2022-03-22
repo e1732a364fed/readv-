@@ -169,3 +169,4 @@ _, isFile := reader.(*os.File)
 
 所以说，readv的提升仅限于 不支持 splice 但却 确实是直接 直连读取的情况。 因为readv和writev的对象必须是 底层连接。
 
+进一步来说，就是vmess 协议 这种 不用tls 的协议 能在加密解密的过程中 使用 net.Buffer 这种 缓存数组，则 是可以使用 readv的。
