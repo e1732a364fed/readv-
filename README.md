@@ -184,7 +184,7 @@ _, isFile := reader.(*os.File)
 
 # 我的readv实现
 
-可以阅读我的 verysimple项目中 的代码 https://github.com/hahahrfool/v2ray_simple/tree/main/netLayer
+可以阅读我的 verysimple项目中 的代码 https://github.com/e1732a364fed/v2ray_simple/tree/main/netLayer
 
 下面是我的benchmark
 
