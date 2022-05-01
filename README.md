@@ -186,6 +186,8 @@ _, isFile := reader.(*os.File)
 
 可以阅读我的 verysimple项目中 的代码 https://github.com/e1732a364fed/v2ray_simple/tree/main/netLayer
 
+和 https://github.com/e1732a364fed/v2ray_simple/blob/main/utils/readv_posix.go
+
 下面是我的benchmark
 
 我们本地benchmark，实际benchmark readv 是比 经典拷贝慢的
